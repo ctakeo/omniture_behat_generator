@@ -1,0 +1,144 @@
+<?php
+/**
+ * @file
+ * This module adds some extra functionality to the External Links module.
+ */
+
+function omniture_behat_generator_page_build(&$page){
+
+}
+
+function omniture_behat_generator_menu(){
+  $items['admin/config/evidence'] = array(
+    'title' => 'Evidences',
+    'description' => 'Omniture evidences',
+    'position' => 'left',
+    'weight' => -100,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('administer site configuration'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/config/evidence/behat_generator']  = array(
+    'title' => 'Behat generator',
+    'description' => 'Generate behat script based on existing props',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('omniture_behat_generator_form'),
+    'access arguments' => array('access administration pages'),
+  );
+
+  return $items;
+}
+
+function omniture_behat_generator_form($form, &$form_state) {
+  if (module_exists('omniture')){
+
+    $path = drupal_get_path('module', 'omniture_behat_generator');
+    // Add our JS in the footer so it will execute after extlink.js.
+    $date = date('m').'/'.date('d').'/'.date('Y');
+
+    $error = variable_get('omniture_behat_generator_error', false);
+    if (!$error){   
+
+      drupal_add_js($path . '/behat_generator.js', array('group' => JS_LIBRARY, 'scope' => 'footer'));
+      drupal_add_js(array(
+        'omniture_behat_generator' => array(
+            'used_to_generate' => variable_get('omniture_default_js', ''),
+            'props_exceptions' => variable_get('props_exceptions', ''),
+            'initial_date' => variable_get('initial_date_set', $date),
+            'final_date' => variable_get('final_date_set', $date),
+          ),
+      ) ,'setting');
+      $generated_script_default_value = '';
+    } else {
+      $generated_script_default_value = 'The script will not be generated until the final date is correct.';
+    } 
+
+    $form['generated_script'] = array(
+      '#type' => 'textarea',
+      '#value' => $generated_script_default_value,
+      '#size' => 100,
+      '#rows' => 30,
+      '#maxlength' => 5000,
+      '#disabled' => TRUE,
+    );
+
+    $form['props_exceptions'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Props/Events Exceptions',
+      '#default_value' => variable_get('props_exceptions', ''),
+      '#description' => 'Define props and/or events to be ignored when creating the script. Use , as separator (i.e.: prop1,event1,prop3)',
+      '#size' => 100,
+      '#maxlength' => 9000,
+    );
+
+
+    $usable_final_date = variable_get('final_date_set', $date);
+    $usable_initial_date = variable_get('initial_date_set', $date);
+    $array_initial_date = array('month' => substr($usable_initial_date,0,2), 'day' => substr($usable_initial_date,3,2), 'year' => substr($usable_initial_date,6,4));
+    $array_final_date = array('month' => substr($usable_final_date,0,2), 'day' => substr($usable_final_date,3,2), 'year' => substr($usable_final_date,6,4));
+
+    $format = 'm/d/Y';
+   
+    $form['initial_date'] = array(
+       '#type' => 'date_text', // types 'date_text' and 'date_timezone' are also supported. See .inc file.
+       '#title' => t('From'),
+       '#default_value' => $array_initial_date, 
+       '#date_format' => $format,
+       '#date_label_position' => 'within', // See other available attributes and what they do in date_api_elements.inc
+       '#date_year_range' => '-1:+1', // Optional, used to set the year range (back 3 years and forward 3 years is the default).
+       '#required' => TRUE,
+    );
+
+    $form['final_date'] = array(
+       '#type' => 'date_text', // types 'date_text' and 'date_timezone' are also supported. See .inc file.
+       '#title' => t('To'),
+       '#default_value' => $array_final_date, 
+       '#date_format' => $format,
+       '#date_label_position' => 'within', // See other available attributes and what they do in date_api_elements.inc
+       '#date_year_range' => '-1:+1', // Optional, used to set the year range (back 3 years and forward 3 years is the default).
+       '#required' => TRUE,
+    );
+
+    $form['#validate'][] = 'omniture_behat_generator_form_validate';
+    $form['#submit'][] = 'omniture_behat_generator_form_submit';
+
+    return system_settings_form($form);
+  } else {
+    drupal_set_message(t('Omniture module was not detected in this instance of Drupal.'), 'info');
+  }
+}
+
+function omniture_behat_generator_form_validate(&$form, &$form_state){
+  $final_date = str_replace('/','-',$form['final_date']['date']['#value']);
+  $initial_date = str_replace('/','-',$form['initial_date']['date']['#value']);
+  $current_date = date('m').'-'.date('d').'-'.date('Y');
+
+  if ($final_date < $initial_date){
+    variable_set('omniture_behat_generator_error', true);
+    variable_set('final_date_set', $form['final_date']['date']['#value']);
+    drupal_goto('admin/config/evidence/behat_generator');
+  } else if ($final_date > $current_date) {
+    variable_set('omniture_behat_generator_error', true);
+    variable_set('final_date_set', $form['final_date']['date']['#value']);
+    drupal_goto('admin/config/evidence/behat_generator');
+  } else {
+    variable_set('omniture_behat_generator_error', false);
+  }
+}
+
+function omniture_behat_generator_form_submit(&$form, &$form_state){
+  variable_set('props_exceptions', $form['props_exceptions']['#value']);
+  variable_set('initial_date_set', $form['initial_date']['date']['#value']);
+  variable_set('final_date_set', $form['final_date']['date']['#value']);
+}
+
+function omniture_behat_generator_form_omniture_behat_generator_form_alter(&$form, &$form_state, $form_id)
+{
+
+}
+
+
+
+

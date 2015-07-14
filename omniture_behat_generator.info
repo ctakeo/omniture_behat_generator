@@ -1,0 +1,7 @@
+name = Omniture Behat Generator
+description = This will automatically generate a behat script with all the props
+core = 7.x
+files[] = omniture_behat_generator.module
+dependencies[] = date
+
+
