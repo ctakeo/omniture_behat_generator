@@ -9,8 +9,8 @@ Acess the config menu through the URL admin/config/evidence/behat_generator or a
 
 You MUST:
   - create a folder named "Screenshot" inside behat folder.
-  - replace <suitename> with the suite name used in the search box.
-  - replace <InsertUsernameHere> and <InsertPasswordHere> with the omniture username and password. 
+  - replace -suitename- with the suite name used in the search box.
+  - replace -InsertUsernameHere- and -InsertPasswordHere- with the omniture username and password. 
   - place the file inside the "behat-needed-files" folder insider your behat folder
   
 *This module has been tested using platform version 7.x-2.4.5. Please report any bugs.<br>
