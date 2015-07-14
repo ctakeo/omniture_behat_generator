@@ -96,7 +96,7 @@ And wait 8 seconds\n\
 
 	$('#edit-generated-script').val($('#edit-generated-script').val() + 'And I click on ".coral-Button--rsidSelector"\n\
 And wait 5 seconds\n\
-When I fill in "Search Report Suites" with "PVC Redesign Drupal Prod"\n\
+When I fill in "Search Report Suites" with "<suitename>"\n\
 And wait 5 seconds\n\
 And I click on ".suite-selected"\n\
 And wait 3 seconds\n\
