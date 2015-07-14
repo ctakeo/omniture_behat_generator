@@ -9,4 +9,6 @@ Acess the config menu through the URL admin/config/evidence/behat_generator or a
 
 *You MUST create a folder named "Screenshot" inside behat folder.<br>
 *This module has been tested using platform version 7.x-2.4.5. Please report any bugs.<br>
-*For this to work the <suitename> inside the script must be replaced by the suite name used in the search.
+*Before the generated script is usable some changes must be made: 
+  -<suitename> must be replaced with the suite name used in the search box.
+  -<InsertUsernameHere> and <InsertPasswordHere> must be replaced with the omniture username and password. 
