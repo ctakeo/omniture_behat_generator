@@ -88,8 +88,8 @@
 Scenario: Access Site Catalyst\n\
 Given I am on "https://sc2.omniture.com/login/"\n\
 When I fill in "company_input_field" with "Pfizer"\n\
-When I fill in "username_input_field" with "cint"\n\
-When I fill in "password_input_field" with "pfizer"\n\
+When I fill in "username_input_field" with "<InsertUsernameHere>"\n\
+When I fill in "password_input_field" with "<InsertPasswordHere>"\n\
 And I press "login_button"\n\
 And wait 8 seconds\n\
 \n');
@@ -102,7 +102,6 @@ And I click on ".suite-selected"\n\
 And wait 3 seconds\n\
 \n');
 
-
 	$('#edit-generated-script').val($('#edit-generated-script').val() + 'And I click on ".CalendarWidgetActivator"\n');
 	$('#edit-generated-script').val($('#edit-generated-script').val() + 'When I fill in the calendar field "[class=\'MonthBlock\'] input[name=start]" with "'+Drupal.settings.omniture_behat_generator.initial_date+'"\n');
 	$('#edit-generated-script').val($('#edit-generated-script').val() + 'And wait 3 seconds\n');
@@ -110,6 +109,67 @@ And wait 3 seconds\n\
 	$('#edit-generated-script').val($('#edit-generated-script').val() + 'And wait 3 seconds\n');
 	$('#edit-generated-script').val($('#edit-generated-script').val() + 'And I press "change_date_update"\n');
 	$('#edit-generated-script').val($('#edit-generated-script').val() + '\n');
+
+
+  $('#edit-generated-script').val($('#edit-generated-script').val() + 'And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(1)"\n\
+And I follow "Page Views"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Page_Views" in the folder "Screenshots"\n\
+\n\
+And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(1)"\n\
+And I follow "Visits"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Visits" in the folder "Screenshots"\n\
+\n\
+And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(1)"\n\
+And I click on ".miller-column:nth-child(2) .miller-column-item:nth-child(5)"\n\
+And I follow "Unique Visitors"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Unique_Visitors" in the folder "Screenshots"\n\
+\n\
+And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(1)"\n\
+And I follow "Time Spent per Visit"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Time_Spent_per_Visit" in the folder "Screenshots"\n\
+\n\
+And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(3)"\n\
+And I follow "Devices"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Devices" in the folder "Screenshots"\n\
+\n');
+
+
+	$('#edit-generated-script').val($('#edit-generated-script').val() + 'And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(9)"\n\
+And I click on ".miller-column:nth-child(2) .miller-column-item:nth-child(6)"\n\
+And I follow "Browsers"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Browsers" in the folder "Screenshots"\n\
+\n\
+And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(2)"\n\
+And I follow "Pages"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Pages" in the folder "Screenshots"\n\
+\n\
+And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(2)"\n\
+And I follow "Pages"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Pages" in the folder "Screenshots"\n\
+\n\
+And I press "View All Reports"\n\
+And I click on ".miller-column-item:nth-child(14)"\n\
+And I click on ".miller-column:nth-child(2) .miller-column-item:nth-child(2)"\n\
+And I follow "Document URL"\n\
+And wait 10 seconds\n\
+Then I take a screenshot named "Document_URL" in the folder "Screenshots"\n\
+\n');
 
 	var notFound = true;
 	for (var i = 0; i < propsList.length; i++){

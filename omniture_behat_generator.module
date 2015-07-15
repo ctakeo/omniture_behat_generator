@@ -48,6 +48,8 @@ function omniture_behat_generator_form($form, &$form_state) {
             'props_exceptions' => variable_get('props_exceptions', ''),
             'initial_date' => variable_get('initial_date_set', $date),
             'final_date' => variable_get('final_date_set', $date),
+            'behat_omniture_username' => variable_get('behat_omniture_username', ''),
+            'behat_omniture_password' => variable_get('behat_omniture_password', ''),
           ),
       ) ,'setting');
       $generated_script_default_value = '';
@@ -110,12 +112,14 @@ function omniture_behat_generator_form($form, &$form_state) {
   }
 }
 
-function omniture_behat_generator_form_validate(&$form, &$form_state){
+function omniture_behat_generator_form_validate(&$form, &$form_state) {
   $final_date = str_replace('/','-',$form['final_date']['date']['#value']);
   $initial_date = str_replace('/','-',$form['initial_date']['date']['#value']);
   $current_date = date('m').'-'.date('d').'-'.date('Y');
 
-  if ($final_date < $initial_date){
+  dsm($format);
+
+  if ($final_date < $initial_date) {
     variable_set('omniture_behat_generator_error', true);
     variable_set('final_date_set', $form['final_date']['date']['#value']);
     drupal_goto('admin/config/evidence/behat_generator');
@@ -126,6 +130,8 @@ function omniture_behat_generator_form_validate(&$form, &$form_state){
   } else {
     variable_set('omniture_behat_generator_error', false);
   }
+
+  
 }
 
 function omniture_behat_generator_form_submit(&$form, &$form_state){
